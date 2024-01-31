@@ -62,6 +62,7 @@ char* pvm::DifferentParametersNumberError::what()
     return msg.data();
 }
 
+pvm::instruction::instruction() { }
 pvm::instruction::instruction(pvm::instr kind) : kind(kind) { }
 pvm::instruction::instruction(pvm::instr kind, symbol sym) : kind(kind), sym(sym) { }
 pvm::instruction::instruction(int value) : kind(instr::INT), i(value) { }
@@ -189,7 +190,7 @@ long long pvm::findrelmsg(optr owner, std::string name)
     return -1;
 }
 
-void pvm::defmethod(optr owner, std::string name, pvm::objvec args, pvm::objvec ret, pvm::instrvec body)
+void pvm::defmethod(optr owner, symbol name, pvm::objvec args, pvm::objvec ret, pvm::instrvec body)
 {
     long long msgi = findrelmsg(owner, name);
     if (msgi == -1) throw NoMessageError(owner, name);

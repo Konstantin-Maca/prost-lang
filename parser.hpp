@@ -24,6 +24,7 @@ namespace parser
         SPACING("^\\s+$"),
         TOKEN("(\\(.*?\\))|(\\(.*)|(\\\\.*?\n)|(\".*?\")|('.)|([!@$:]?[A-Za-z_]\\w+)|(-?\\d+(\\.\\d+)?)|([!:]?[~#%^&*-+=\\|<>\\?/]+)|(\\s+)|(.)");
 
+    class TokenTypeError : public std::exception {};
     class UnexpectedTokenError : public std::exception
     {
     private:
@@ -35,8 +36,9 @@ namespace parser
 
     enum class ttype : unsigned short
     {
+	ERROR,
         INT, FLOAT, CHAR, SYMBOL, STRING,
-        METHOD, CMETHOD, CFIELD,
+        METHOD, CMETHOD, CFIELD, GFIELD,
         OBRACKET, CBRACKET, ARRAY,
         OBRACE, CBRACE, BLOCK,
         IGNORED,
@@ -55,6 +57,7 @@ namespace parser
         symbol sym;
         std::string str;
 
+	token();
         token(ttype);
         token(ttype, symbol);
         token(int);

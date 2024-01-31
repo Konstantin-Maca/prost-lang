@@ -1,5 +1,6 @@
 #include "parser.hpp"
 
+parser::token::token() : type(parser::ttype::ERROR) { }
 parser::token::token(ttype type) : type(type) { }
 parser::token::token(ttype type, symbol sym) : type(type), sym(sym) { }
 parser::token::token(int value) : type(parser::ttype::INT), i(value) { }
@@ -22,12 +23,12 @@ parser::ttype parser::guessttype(std::string source)
     if (std::regex_match(source, FLOAT)) return ttype::FLOAT;
     if (std::regex_match(source, CHAR)) return ttype::CHAR;
     if (std::regex_match(source, STRING)) return ttype::STRING;
-    if (std::regex_match(source, CFIELD)) return ttype::CFIELD;
+    if (std::regex_match(source, METHOD)) return ttype::METHOD;
     if (std::regex_match(source, CMETHOD)) return ttype::CMETHOD;
+    if (std::regex_match(source, CFIELD)) return ttype::CFIELD;
     if (std::regex_match(source, GFIELD)) return ttype::GFIELD;
-    if (std::regex_match(source, GMETHOD)) return TGMETHOD;
-    if (std::regex_match(source, SYMBOL)) return TSYMBOL;
-    std::cout << "Failed to guess kind of token `" << source << "'\n";
+    if (std::regex_match(source, SYMBOL)) return ttype::SYMBOL;
+    throw TokenTypeError();
     exit(1);
 }
 

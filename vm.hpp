@@ -6,6 +6,7 @@
 #include "map"
 
 #include "symbol.hpp"
+#include "parser.hpp"
 
 namespace pvm
 {
@@ -89,6 +90,7 @@ namespace pvm
         char c;
         symbol sym;
 
+	instruction();
         instruction(instr);
         instruction(instr, symbol);
         instruction(int);
@@ -150,7 +152,7 @@ namespace pvm
     optr defcopy(optr);
     unsigned reldeg(optr, optr, unsigned);
 
-    void pvm::deffield(field);
+    void deffield(field);
     void deffield(optr, std::string, optr, optr);
     void setfield(optr, std::string, optr);
     field* getfield(optr, std::string);
@@ -158,13 +160,13 @@ namespace pvm
     void defmessage(optr, std::string, unsigned);
     long long findrelmsg(optr, std::string);
 
-    void defmethod(optr, std::string, objvec, objvec, std::vector<instr>);
+    void defmethod(optr, symbol, objvec, objvec, instrvec);
 
-    pvm::instrvec pvm::compile(std::vector<parser::token>);
-    void pvm::typecheck(pvm::instrvec);
+    instrvec compile(std::vector<parser::token>);
+    void typecheck(pvm::instrvec);
 
     void defstd();
-    void pvm::run(pvm::instrvec);
+    void run(pvm::instrvec);
 
     namespace stdo
     {
