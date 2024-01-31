@@ -1,5 +1,5 @@
-#ifndef VM_HPP
-#define VM_HPP
+#ifndef PROST_VM_HPP
+#define PROST_VM_HPP
 
 #include "string"
 #include "vector"
@@ -13,6 +13,7 @@ namespace pvm
 
     typedef unsigned optr;
     typedef std::vector<optr> objvec;
+    typedef std::pair<optr, optr> opair;
 
     class ProstError : public std::exception {};
     class NoFieldError : public ProstError
@@ -138,17 +139,7 @@ namespace pvm
         method(optr, std::string, objvec, objvec, instrvec);
         bool same_args(objvec);
     };
-
-    optr opcount = 0;
-    std::map<optr, optr> objects;
-
-    std::vector<field> fields;
-    std::vector<message> messages;
-    std::vector<method> methods;
-
-    objvec ctxstack;
-    objvec stack;
-
+    
     optr defcopy(optr);
     unsigned reldeg(optr, optr, unsigned);
 
@@ -167,13 +158,6 @@ namespace pvm
 
     void defstd();
     void run(pvm::instrvec);
-
-    namespace stdo
-    {
-    
-        optr OBJECT = 0, INT, FLOAT, CHAR, SYMBOL, ARRAY, BLOCK;
-        
-    } // namespace stdo
 
 } // namespace pvm
 

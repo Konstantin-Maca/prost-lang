@@ -3,6 +3,29 @@
 #include "parser.hpp"
 #include "symbol.hpp"
 
+namespace pvm
+{
+
+    // Variables should be declared in the cpp-file.
+    optr opcount = 0;
+    std::map<optr, optr> objects;
+
+    std::vector<field> fields;
+    std::vector<message> messages;
+    std::vector<method> methods;
+
+    objvec ctxstack;
+    objvec stack;
+
+    namespace stdo
+    {
+    
+        optr OBJECT = 0, INT, FLOAT, CHAR, SYMBOL, ARRAY, BLOCK;
+        
+    } // namespace stdo
+
+} // namespace pvm
+
 pvm::NoFieldError::NoFieldError(pvm::optr owner, symbol name) : owner(owner), name(name) {}
 char* pvm::NoFieldError::what()
 {
@@ -90,10 +113,10 @@ bool pvm::method::same_args(pvm::objvec other_args)
     return true;
 }
 
-pvm::optr defcopy(pvm::optr parent)
+pvm::optr pvm::defcopy(pvm::optr parent)
 {
-    pvm::objects.insert(pvm::opcount, parent);
-    return pvm::opcount++;
+    objects.insert(opair(opcount, parent));
+    return opcount++;
 }
 unsigned pvm::reldeg(pvm::optr object, pvm::optr super_object, unsigned d = 1)
 {
@@ -140,7 +163,7 @@ void pvm::setfield(pvm::optr owner, std::string name, pvm::optr value)
     {
         if (f.owner == owner && f.name == name)
         {
-            if (pvm::reldeg(value, f.prototype)) f.value_ptr = value;
+            if (reldeg(value, f.prototype)) f.value_ptr = value;
             else throw NoObjectRelationError(owner, name, value, f.prototype);
             return;
         }
@@ -217,7 +240,8 @@ void pvm::defmethod(optr owner, symbol name, pvm::objvec args, pvm::objvec ret, 
 
 void pvm::defstd()
 {
-    objects.insert(opcount++, 0u);
+    opcount = 0;
+    objects.insert(opair(opcount++, 0u));
     defmessage(0, "copy", 0);
     defmethod(0, "copy", objvec(0), objvec { 0u }, instrvec { instruction(instr::COPY) });
 }
@@ -242,7 +266,7 @@ pvm::instrvec pvm::compile(std::vector<parser::token> tokens)
             bytecode.push_back(instruction(token.sym));
             break;
         case parser::ttype::METHOD:
-            bytecode.push_back(instruction(pvm::instr::CALL, token.sym));
+            bytecode.push_back(instruction(instr::CALL, token.sym));
             break;
         default:
             break;
@@ -254,3 +278,5 @@ pvm::instrvec pvm::compile(std::vector<parser::token> tokens)
 void pvm::typecheck(pvm::instrvec bytecode);
 
 void pvm::run(pvm::instrvec bytecode);
+
+

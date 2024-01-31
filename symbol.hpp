@@ -1,5 +1,5 @@
-#ifndef SYMBOL_HPP
-#define SYMBOL_HPP
+#ifndef PROST_SYMBOL_HPP
+#define PROST_SYMBOL_HPP
 
 #include "string"
 

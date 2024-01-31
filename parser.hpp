@@ -1,5 +1,5 @@
-#ifndef PARSER_HPP
-#define PARSER_HPP
+#ifndef PROST_PARSER_HPP
+#define PROST_PARSER_HPP
 
 #include "string"
 #include "vector"
