@@ -1,0 +1,6 @@
+int 2 push 2 copy dup dup push 2 swap deff @ setfi @
+int 2 push 2 copy dup dup push 2 swap deff @ setfi @
+call +
+int 2 push 2 copy dup dup push 2 swap deff @ setfi @
+call *
+$
